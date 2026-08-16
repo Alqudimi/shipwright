@@ -1,5 +1,9 @@
 # Dependencies
 **/node_modules
+.venv/
+venv/
+*.egg-info/
+
 .pnpm-store/
 
 # Build outputs
@@ -46,6 +50,9 @@ pids
 *.pid.lock
 
 # Coverage directory used by tools like istanbul
+.coverage
+htmlcov/
+
 coverage/
 *.lcov
 

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "shipwright-readiness"
+version = "0.1.0"
+description = "Evidence-backed repository release readiness checks"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Abdulaziz Alqudimi" }]
+keywords = ["open-source", "release-engineering", "repository-health", "sarif", "cli"]
+classifiers = ["Development Status :: 3 - Alpha", "Programming Language :: Python :: 3", "Topic :: Software Development :: Quality Assurance"]
+
+[project.scripts]
+shipwright = "shipwright_core.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.8", "mypy>=1.13", "build>=1.2"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["shipwright_core"]
+
+[tool.pytest.ini_options]
+addopts = "-q --cov=shipwright_core --cov-report=term-missing --cov-fail-under=85"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+strict = true

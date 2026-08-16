@@ -1,0 +1,5 @@
+[policy]
+name = "public-release"
+minimum_score = 80
+required_checks = ["documentation", "tests", "ci", "license", "secret-hygiene"]
+include_optional = true
