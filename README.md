@@ -7,6 +7,7 @@ Shipwright is a local-first repository release-readiness auditor. It inspects th
 [![CI](https://github.com/Alqudimi/shipwright/actions/workflows/ci.yml/badge.svg)](https://github.com/Alqudimi/shipwright/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-C65D38.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-1F2937.svg)](pyproject.toml)
+[![Security](https://img.shields.io/badge/security-pip--audit%20%2B%20zizmor-3D765C.svg)](.github/workflows/security.yml)
 
 ## Why Shipwright exists
 
@@ -94,6 +95,17 @@ Markdown is designed for a pull request or release checklist. JSON is the stable
 
 The core package is framework-independent: domain models do not know about Click, GitHub, or a database. Detectors are small functions returning `CheckResult` records. New checks and future providers can be added without changing the output contract.
 
+## Container quick start
+
+The CLI can run in a minimal non-root container without installing Python locally:
+
+```bash
+docker build -t shipwright .
+docker run --rm -v "$PWD:/workspace:ro" -w /workspace shipwright inspect .
+```
+
+The image is intentionally read-only from the inspected repository’s perspective and does not execute project code.
+
 ## Development
 
 ```bash
@@ -104,6 +116,10 @@ python -m build
 ```
 
 The test suite uses temporary fixture repositories and covers ready paths, policy blockers, report contracts, and secret detection. Shipwright never executes a target repository during inspection.
+
+## Security workflow
+
+The repository has a separate scheduled and pull-request security workflow. `pip-audit` checks the installed Python dependency graph, while `zizmor` audits GitHub Actions workflow patterns. These tools are deliberately composed rather than reimplemented inside Shipwright.
 
 ## Security model
 
@@ -117,7 +133,9 @@ Shipwright treats the inspected repository as untrusted input. It reads bounded 
 - `shipwright_core/renderers.py` — JSON, Markdown, and SARIF adapters.
 - `shipwright_core/cli.py` — stable command-line interface.
 - `docs/architecture.md` — design boundaries and extension points.
+- `docs/improvement-audit.md` — competitive rationale and hardening decisions.
 - `.github/workflows/ci.yml` — lint, type check, tests, and build.
+- `.github/workflows/security.yml` — dependency and workflow security checks.
 
 ## Roadmap
 

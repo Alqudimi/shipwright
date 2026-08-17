@@ -38,10 +38,13 @@ def test_missing_readme_blocks_and_gate_fails(tmp_path: Path) -> None:
 
 
 def test_renderers_emit_contracts(tmp_path: Path) -> None:
-    report = run_audit(make_repo(tmp_path), Policy())
+    report = run_audit(make_repo(tmp_path, complete=False), Policy())
     assert '"checks"' in to_json(report)
     assert "Evidence ledger" in to_markdown(report)
-    assert '"version": "2.1.0"' in to_sarif(report)
+    sarif = to_sarif(report)
+    assert '"version": "2.1.0"' in sarif
+    assert '"rules"' in sarif
+    assert '"uriBaseId": "%SRCROOT%"' in sarif
 
 
 def test_secret_scan_blocks_high_confidence_pattern(tmp_path: Path) -> None:

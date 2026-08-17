@@ -48,19 +48,29 @@ def to_markdown(report: AuditReport) -> str:
 
 def to_sarif(report: AuditReport) -> str:
     results: list[dict[str, Any]] = []
+    rules: list[dict[str, Any]] = []
     for check in report.checks:
         if check.status == CheckStatus.VERIFIED:
             continue
         level = "error" if check.status == CheckStatus.BLOCKED else "warning"
+        rules.append({
+            "id": check.check_id,
+            "shortDescription": {"text": check.title},
+            "fullDescription": {"text": check.summary},
+            "help": {"text": check.remediation or "No remediation required."},
+        })
         results.append({
             "ruleId": check.check_id,
             "level": level,
             "message": {"text": check.summary},
-            "locations": [{"physicalLocation": {"artifactLocation": {"uri": item.source}}} for item in check.evidence],
+            "locations": [
+                {"physicalLocation": {"artifactLocation": {"uri": item.source, "uriBaseId": "%SRCROOT%"}}}
+                for item in check.evidence
+            ],
         })
     payload = {
         "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
         "version": "2.1.0",
-        "runs": [{"tool": {"driver": {"name": "Shipwright", "version": report.tool_version}}, "results": results}],
+        "runs": [{"tool": {"driver": {"name": "Shipwright", "version": report.tool_version, "rules": rules}}, "results": results}],
     }
     return json.dumps(payload, indent=2) + "\n"
