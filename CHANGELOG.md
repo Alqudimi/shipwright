@@ -2,6 +2,14 @@
 
 All notable changes to Shipwright are documented here.
 
+## [0.3.0] - Unreleased
+
+### Added
+
+- Release workflow for semantic-version tags.
+- OIDC-backed signed artifact provenance attestations for sdist and wheel outputs.
+- Consumer verification and future PyPI Trusted Publishing documentation.
+
 ## [0.2.0] - 2026-08-17
 
 ### Added

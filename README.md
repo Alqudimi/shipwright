@@ -117,6 +117,10 @@ python -m build
 
 The test suite uses temporary fixture repositories and covers ready paths, policy blockers, report contracts, and secret detection. Shipwright never executes a target repository during inspection.
 
+## Release provenance
+
+Version tags trigger a release workflow that builds the Python artifacts and creates OIDC-backed provenance attestations. Consumers can verify a downloaded artifact with `gh attestation verify`; see [docs/release.md](docs/release.md). This links an artifact to its source and build, but does not replace vulnerability review.
+
 ## Security workflow
 
 The repository has a separate scheduled and pull-request security workflow. `pip-audit` checks the installed Python dependency graph, while `zizmor` audits GitHub Actions workflow patterns. These tools are deliberately composed rather than reimplemented inside Shipwright.
@@ -136,6 +140,8 @@ Shipwright treats the inspected repository as untrusted input. It reads bounded 
 - `docs/improvement-audit.md` — competitive rationale and hardening decisions.
 - `.github/workflows/ci.yml` — lint, type check, tests, and build.
 - `.github/workflows/security.yml` — dependency and workflow security checks.
+- `.github/workflows/release.yml` — package build and signed artifact provenance.
+- `docs/release.md` — release, attestation, and PyPI publishing guidance.
 
 ## Roadmap
 
