@@ -2,6 +2,13 @@
 
 All notable changes to Shipwright are documented here.
 
+## [0.3.2] - 2026-08-19
+
+### Fixed
+
+- Use the official `attest-build-provenance` wrapper so tag releases generate the default SLSA build provenance predicate.
+- Keep the release path pinned and avoid custom predicate configuration for standard build provenance.
+
 ## [0.3.1] - 2026-08-19
 
 ### Fixed
