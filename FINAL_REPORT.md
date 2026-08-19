@@ -77,3 +77,12 @@ The repository includes README, architecture documentation, policy example, CONT
 [5]: https://arize.com/blog/best-ai-observability-tools-for-autonomous-agents-in-2026/ "AI agent observability comparison"
 [6]: https://github.com/clay-good/agent-replay "agent-replay repository"
 [7]: https://nordicapis.com/10-tools-for-securing-mcp-servers/ "MCP security tools comparison"
+
+
+## Hardening addendum — v0.2.0
+
+تمت مراجعة الحالة المنشورة وإضافة hardening عالي الأثر دون تغيير فلسفة local-first. أضيف `Dockerfile` يعمل بمستخدم غير root، و`.dockerignore`، وSecurity workflow مجدول وعلى pull requests باستخدام `pip-audit` و`zizmor --offline`. أُثبتت Actions على commit SHAs مع `persist-credentials: false`، وأصبح SARIF يحمل rule metadata وremediation help و`%SRCROOT%` locations المتوافقة مع عرض GitHub Code Scanning.
+
+أضيفت قوالب Pull Request وbug وfeature، ووثيقة `docs/improvement-audit.md` التي تشرح لماذا يتكامل Shipwright مع OpenSSF Scorecard وzizmor بدل إعادة تنفيذ محركاتهما. ارتفعت التغطية المقاسة إلى **94.09%** مع 6 اختبارات ناجحة، ونجحت Ruff وstrict Mypy وبناء الحزمة و`pip-audit` وzizmor offline. نجحت GitHub Actions للـ CI والـ Security على commit `ab52c5c`، وتم نشر الإصدار [v0.2.0](https://github.com/Alqudimi/shipwright/releases/tag/v0.2.0).
+
+اختبار Docker الفعلي تعذر فقط لأن sandbox لا يحتوي على Docker أو Podman أو Buildah؛ تم التحقق من Dockerfile و`.dockerignore` ثابتًا، ووُثّق هذا القيد في release notes بدل الادعاء بتشغيل لم يحدث.
