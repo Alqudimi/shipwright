@@ -86,3 +86,12 @@ The repository includes README, architecture documentation, policy example, CONT
 أضيفت قوالب Pull Request وbug وfeature، ووثيقة `docs/improvement-audit.md` التي تشرح لماذا يتكامل Shipwright مع OpenSSF Scorecard وzizmor بدل إعادة تنفيذ محركاتهما. ارتفعت التغطية المقاسة إلى **94.09%** مع 6 اختبارات ناجحة، ونجحت Ruff وstrict Mypy وبناء الحزمة و`pip-audit` وzizmor offline. نجحت GitHub Actions للـ CI والـ Security على commit `ab52c5c`، وتم نشر الإصدار [v0.2.0](https://github.com/Alqudimi/shipwright/releases/tag/v0.2.0).
 
 اختبار Docker الفعلي تعذر فقط لأن sandbox لا يحتوي على Docker أو Podman أو Buildah؛ تم التحقق من Dockerfile و`.dockerignore` ثابتًا، ووُثّق هذا القيد في release notes بدل الادعاء بتشغيل لم يحدث.
+
+
+## v0.3.x provenance verification addendum
+
+أضيف في هذه الدورة مسار release provenance حقيقي إلى `.github/workflows/release.yml`. عند إنشاء v0.3.0 ظهر فشل فعلي في خطوة attestation بسبب غياب `predicate-type`. بعد إضافة SLSA predicate ظهر فشل ثانٍ لأن الاستخدام المباشر لـ `actions/attest` يتطلب `predicate` أو `predicate-path`. تم تشخيص ذلك من سجل GitHub، ثم استُبدل الاستخدام بالـ wrapper الرسمي المثبت `actions/attest-build-provenance`، ووُثّقت واجهة القرار في `docs/release.md`.
+
+تم إنشاء v0.3.2 من commit `ed4f816` بعد نجاح CI وSecurity. تشغيل Release رقم `32262808931` نجح بالكامل: بناء الحزمة، رفع artifacts، وإنشاء attestation provenance. هذا هو أول تحقق فعلي مكتمل لمسار provenance، وليس مجرد فحص YAML أو ادعاء غير منفذ. كما نجحت تشغيلات CI وSecurity على نفس commit، ونجحت محليًا الاختبارات الستة بتغطية 94.09%، Ruff، strict Mypy، build، pip-audit، وzizmor offline.
+
+القيود المتبقية: لم أختبر `gh attestation verify` على ملف wheel محليًا لأن artifact الناتج يعيش داخل GitHub Actions ولم يتم تنزيله إلى sandbox؛ لكن خطوة attestation نفسها نجحت في GitHub Actions. كما أن Docker runtime غير متوفر في البيئة، لذلك لا يوجد ادعاء بتشغيل container فعلي.
