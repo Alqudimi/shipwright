@@ -2,7 +2,14 @@
 
 All notable changes to Shipwright are documented here.
 
-## [0.3.0] - Unreleased
+## [0.3.1] - 2026-08-19
+
+### Fixed
+
+- Declared the SLSA v1 provenance predicate required by the GitHub attestation action.
+- Added regression verification for the tag-triggered release workflow after the first v0.3.0 attestation attempt failed at that input validation step.
+
+## [0.3.0] - 2026-08-19
 
 ### Added
 
