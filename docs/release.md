@@ -21,3 +21,10 @@ The workflow intentionally attests release artifacts, not every test build or so
 - [actions/attest](https://github.com/actions/attest)
 - [PyPI Trusted Publishers](https://docs.pypi.org/trusted-publishers/)
 - [SLSA Provenance](https://slsa.dev/spec/v1.0/provenance)
+
+
+## Implementation note
+
+The release workflow uses `actions/attest-build-provenance` rather than calling the lower-level `actions/attest` action directly. The wrapper supplies the default SLSA build provenance predicate for release artifacts; direct `actions/attest` use requires an explicit custom predicate or predicate file.
+
+Reference: [actions/attest-build-provenance action.yml](https://github.com/actions/attest-build-provenance/blob/main/action.yml).

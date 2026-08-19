@@ -32,7 +32,6 @@ jobs:
           path: dist/
           if-no-files-found: error
       - name: Attest release artifacts
-        uses: actions/attest@ce27ba3b4a9a139d9a20a4a07d69fabb52f1e5bc # v2.2.0
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4
         with:
           subject-path: dist/*
-          predicate-type: https://slsa.dev/provenance/v1
