@@ -109,3 +109,19 @@ The repository includes README, architecture documentation, policy example, CONT
 | `shipwright_readiness-0.1.0.tar.gz` | 158,047 bytes | `c051cfdecbc1d590cce21618a18e318a64f7cb0a8e1beae2f1390586175d24a2` |
 
 أصبح مسار الإصدار الآن قابلًا للاستخدام من منظور المستهلك: تنزيل مباشر من صفحة Release، provenance موقّع، وإمكانية التحقق عبر `gh attestation verify`. لم أعدّل أي مستودع قائم آخر، ولم تُستخدم أسرار طويلة العمر.
+
+
+## v0.3.4 version-integrity addendum
+
+كشف التدقيق أن إصدار GitHub v0.3.3 كان يرفق artifacts باسم `0.1.0` رغم أن tag كان `v0.3.3`. عولج السبب الجذري برفع metadata الحزمة إلى `0.3.4` وإضافة version guard إلى release workflow؛ يستخرج guard الإصدار من tag ويفشل قبل attestation أو upload إذا لم تتطابق أسماء wheel وsdist.
+
+تم نشر v0.3.4 وتشغيل Release رقم `32408004567` بنجاح كامل: build، upload، `Validate artifact version matches tag`، attestation، وattach إلى GitHub Release. كما نجحت CI وSecurity على commit `1f7df8a`.
+
+تم تنزيل artifacts من GitHub والتحقق منها مستقلًا:
+
+| Artifact | Size | SHA-256 |
+| --- | ---: | --- |
+| `shipwright_readiness-0.3.4-py3-none-any.whl` | 14,386 bytes | `412715372797069cc2454401c808223d9d0360fecd87ec97ae13491f8f1c4e26` |
+| `shipwright_readiness-0.3.4.tar.gz` | 159,018 bytes | `02612d84f37b4fa5a4e9af7134279f5ebedb846c53033523225d1cfd6c15f314` |
+
+تم استخراج metadata من wheel نفسه وتأكدت القيم `Name: shipwright-readiness` و`Version: 0.3.4`. بذلك أصبح tag، package metadata، filenames، release assets، وprovenance متسقة في الإصدار الأخير.
