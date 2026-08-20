@@ -119,7 +119,7 @@ The test suite uses temporary fixture repositories and covers ready paths, polic
 
 ## Release provenance
 
-Version tags trigger a release workflow that builds the Python artifacts and creates OIDC-backed provenance attestations. Consumers can verify a downloaded artifact with `gh attestation verify`; see [docs/release.md](docs/release.md). This links an artifact to its source and build, but does not replace vulnerability review.
+Version tags trigger a release workflow that builds the Python artifacts, attaches the wheel and sdist to the GitHub Release, and creates OIDC-backed provenance attestations. Consumers can download an artifact and verify it with `gh attestation verify`; see [docs/release.md](docs/release.md). This links an artifact to its source and build, but does not replace vulnerability review.
 
 ## Security workflow
 

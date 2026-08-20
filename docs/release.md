@@ -1,8 +1,8 @@
 # Release and provenance
 
-Shipwright releases are created from semantic-version tags such as `v0.3.0`. The release workflow builds the sdist and wheel in GitHub Actions, uploads the artifacts, and creates signed artifact attestations through GitHub's OIDC-backed attestation service.
+Shipwright releases are created from semantic-version tags such as `v0.3.0`. The release workflow builds the sdist and wheel in GitHub Actions, uploads the artifacts, attaches them to the matching GitHub Release, and creates signed artifact attestations through GitHub's OIDC-backed attestation service.
 
-The workflow grants only `contents: read`, `id-token: write`, and `attestations: write`. It does not use a long-lived PyPI token. If PyPI publishing is enabled later, configure PyPI Trusted Publishing for the exact repository, workflow, and environment rather than adding an API key to GitHub Secrets.
+The workflow grants only `contents: write`, `id-token: write`, and `attestations: write`; `contents: write` is required solely to attach the built files to the matching GitHub Release. It does not use a long-lived PyPI token. If PyPI publishing is enabled later, configure PyPI Trusted Publishing for the exact repository, workflow, and environment rather than adding an API key to GitHub Secrets.
 
 After downloading an artifact, consumers can verify provenance with GitHub CLI:
 
@@ -13,7 +13,7 @@ gh attestation verify shipwright_readiness-0.3.0-py3-none-any.whl \
 
 An attestation links the artifact to the repository, commit, workflow, triggering event, and OIDC identity. It does not prove that the source or dependency graph is free of vulnerabilities; consumers must still evaluate the project and their own policy.
 
-The workflow intentionally attests release artifacts, not every test build or source file. This keeps provenance meaningful and limits signing noise.
+The workflow intentionally attests release artifacts, not every test build or source file. This keeps provenance meaningful and limits signing noise. The same artifacts are attached to the GitHub Release so consumers can download the exact files that were attested.
 
 ## References
 

@@ -2,6 +2,16 @@
 
 All notable changes to Shipwright are documented here.
 
+## [0.3.3] - 2026-08-20
+
+### Added
+
+- Attach built wheel and sdist files directly to the matching GitHub Release.
+
+### Fixed
+
+- Avoid shell template injection in the release upload step by passing GitHub context through environment variables.
+
 ## [0.3.2] - 2026-08-19
 
 ### Fixed
