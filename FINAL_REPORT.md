@@ -95,3 +95,17 @@ The repository includes README, architecture documentation, policy example, CONT
 تم إنشاء v0.3.2 من commit `ed4f816` بعد نجاح CI وSecurity. تشغيل Release رقم `32262808931` نجح بالكامل: بناء الحزمة، رفع artifacts، وإنشاء attestation provenance. هذا هو أول تحقق فعلي مكتمل لمسار provenance، وليس مجرد فحص YAML أو ادعاء غير منفذ. كما نجحت تشغيلات CI وSecurity على نفس commit، ونجحت محليًا الاختبارات الستة بتغطية 94.09%، Ruff، strict Mypy، build، pip-audit، وzizmor offline.
 
 القيود المتبقية: لم أختبر `gh attestation verify` على ملف wheel محليًا لأن artifact الناتج يعيش داخل GitHub Actions ولم يتم تنزيله إلى sandbox؛ لكن خطوة attestation نفسها نجحت في GitHub Actions. كما أن Docker runtime غير متوفر في البيئة، لذلك لا يوجد ادعاء بتشغيل container فعلي.
+
+
+## v0.3.3 release-assets addendum
+
+كشفت المراجعة الجديدة فجوة عملية: provenance كان ناجحًا، لكن artifacts لم تكن تُرفق بصفحة GitHub Release. أضيفت خطوة `gh release upload` مع `contents: write` مقيّدة إلى workflow release، ثم كشف `zizmor` template injection عالي الثقة بسبب إدخال GitHub context داخل `run`. تم إصلاحه بتمرير `github.ref_name` و`github.repository` عبر environment variables؛ بعد الإصلاح نجحت جميع بوابات الجودة محليًا، ونجح CI وSecurity على commit `d38283c` دون findings.
+
+تم نشر v0.3.3 وتشغيل Release رقم `32378101520` بنجاح كامل: build، upload artifact، attestation، ثم attach assets إلى GitHub Release. تم تنزيل الملفين من GitHub فعليًا في sandbox للتحقق المستقل:
+
+| Artifact | Size | SHA-256 |
+| --- | ---: | --- |
+| `shipwright_readiness-0.1.0-py3-none-any.whl` | 14,385 bytes | `4134fd50090b482dff26287633a8ba43d666177bf9e62e5056db32d618bdb9a4` |
+| `shipwright_readiness-0.1.0.tar.gz` | 158,047 bytes | `c051cfdecbc1d590cce21618a18e318a64f7cb0a8e1beae2f1390586175d24a2` |
+
+أصبح مسار الإصدار الآن قابلًا للاستخدام من منظور المستهلك: تنزيل مباشر من صفحة Release، provenance موقّع، وإمكانية التحقق عبر `gh attestation verify`. لم أعدّل أي مستودع قائم آخر، ولم تُستخدم أسرار طويلة العمر.
