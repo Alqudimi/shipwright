@@ -18,7 +18,13 @@ def make_repo(tmp_path: Path, *, complete: bool = True) -> Path:
     (tmp_path / "tests").mkdir()
     (tmp_path / "tests" / "test_example.py").write_text("def test_ok(): pass\n", encoding="utf-8")
     if complete:
-        (tmp_path / "README.md").write_text("# Fixture\n\nA repository used to verify Shipwright evidence.\n\n## Install\n\nInstall the package with the documented command.\n\n## Usage\n\nRun the CLI against this repository.\n\n## Testing\n\nThe test suite covers the happy path and failure modes.\n\n## Security\n\nNo credentials are required.\n\n## Contributing\n\nSmall changes are welcome.\n\n## License\n\nMIT.\n\nAdditional context for maintainers.\n\nRelease evidence is reviewed before publishing.\n", encoding="utf-8")
+        (tmp_path / "CHANGELOG.md").write_text(
+            "# Changelog\n\n## [0.1.0] - 2026-08-20\n\n- Initial release.\n", encoding="utf-8"
+        )
+        (tmp_path / "README.md").write_text(
+            "# Fixture\n\nA repository used to verify Shipwright evidence.\n\n## Install\n\nInstall the package with the documented command.\n\n## Usage\n\nRun the CLI against this repository.\n\n## Testing\n\nThe test suite covers the happy path and failure modes.\n\n## Security\n\nNo credentials are required.\n\n## Contributing\n\nSmall changes are welcome.\n\n## License\n\nMIT.\n\nAdditional context for maintainers.\n\nRelease evidence is reviewed before publishing.\n",
+            encoding="utf-8",
+        )
     return tmp_path
 
 
@@ -31,7 +37,9 @@ def test_complete_repository_is_ready(tmp_path: Path) -> None:
 
 
 def test_missing_readme_blocks_and_gate_fails(tmp_path: Path) -> None:
-    report = run_audit(make_repo(tmp_path, complete=False), Policy(required_checks=frozenset({"documentation"})))
+    report = run_audit(
+        make_repo(tmp_path, complete=False), Policy(required_checks=frozenset({"documentation"}))
+    )
     documentation = next(check for check in report.checks if check.check_id == "documentation")
     assert documentation.status == CheckStatus.BLOCKED
     assert not gate_passes(report, Policy(required_checks=frozenset({"documentation"})))
@@ -57,7 +65,9 @@ def test_secret_scan_blocks_high_confidence_pattern(tmp_path: Path) -> None:
 
 def test_policy_file_is_loaded(tmp_path: Path) -> None:
     make_repo(tmp_path)
-    (tmp_path / "shipwright.toml").write_text("[policy]\nname='strict'\nminimum_score=91\nrequired_checks=['tests']\n", encoding="utf-8")
+    (tmp_path / "shipwright.toml").write_text(
+        "[policy]\nname='strict'\nminimum_score=91\nrequired_checks=['tests']\n", encoding="utf-8"
+    )
     policy = load_policy(tmp_path)
     assert policy.name == "strict"
     assert policy.minimum_score == 91

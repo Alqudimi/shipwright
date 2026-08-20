@@ -2,6 +2,36 @@
 
 All notable changes to Shipwright are documented here.
 
+## [Unreleased]
+
+### Added
+
+- New `changelog` detector that reports whether a `CHANGELOG` file exists, following the keep-a-changelog convention.
+- Secret-hygiene scan now ignores machine-generated dependency lock files (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `poetry.lock`, `Gemfile.lock`, `composer.lock`, `Cargo.lock`, `go.sum`, `uv.lock`) so contributors are never flagged by artifact content.
+- Secret-hygiene scan now tolerates entries that disappear between enumeration and inspection (time-of-check/time-of-use races) instead of crashing the audit.
+
+## [0.3.2] - 2026-08-19
+
+### Fixed
+
+- Use the official `attest-build-provenance` wrapper so tag releases generate the default SLSA build provenance predicate.
+- Keep the release path pinned and avoid custom predicate configuration for standard build provenance.
+
+## [0.3.1] - 2026-08-19
+
+### Fixed
+
+- Declared the SLSA v1 provenance predicate required by the GitHub attestation action.
+- Added regression verification for the tag-triggered release workflow after the first v0.3.0 attestation attempt failed at that input validation step.
+
+## [0.3.0] - 2026-08-19
+
+### Added
+
+- Release workflow for semantic-version tags.
+- OIDC-backed signed artifact provenance attestations for sdist and wheel outputs.
+- Consumer verification and future PyPI Trusted Publishing documentation.
+
 ## [0.2.0] - 2026-08-17
 
 ### Added

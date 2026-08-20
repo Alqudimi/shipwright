@@ -36,7 +36,9 @@ def to_markdown(report: AuditReport) -> str:
         lines.append(f"| `{check.check_id}` | `{check.status}` | {check.score} | `{evidence}` | {action} |")
     lines.extend(["", "## Check details", ""])
     for check in report.checks:
-        lines.extend([f"### {check.title}", "", f"**Status:** `{check.status}`  ", f"**Summary:** {check.summary}", ""])
+        lines.extend(
+            [f"### {check.title}", "", f"**Status:** `{check.status}`  ", f"**Summary:** {check.summary}", ""]
+        )
         for item in check.evidence:
             command = f" · `{item.command}`" if item.command else ""
             lines.append(f"- `{item.source}` — {item.detail}{command}")
@@ -53,24 +55,33 @@ def to_sarif(report: AuditReport) -> str:
         if check.status == CheckStatus.VERIFIED:
             continue
         level = "error" if check.status == CheckStatus.BLOCKED else "warning"
-        rules.append({
-            "id": check.check_id,
-            "shortDescription": {"text": check.title},
-            "fullDescription": {"text": check.summary},
-            "help": {"text": check.remediation or "No remediation required."},
-        })
-        results.append({
-            "ruleId": check.check_id,
-            "level": level,
-            "message": {"text": check.summary},
-            "locations": [
-                {"physicalLocation": {"artifactLocation": {"uri": item.source, "uriBaseId": "%SRCROOT%"}}}
-                for item in check.evidence
-            ],
-        })
+        rules.append(
+            {
+                "id": check.check_id,
+                "shortDescription": {"text": check.title},
+                "fullDescription": {"text": check.summary},
+                "help": {"text": check.remediation or "No remediation required."},
+            }
+        )
+        results.append(
+            {
+                "ruleId": check.check_id,
+                "level": level,
+                "message": {"text": check.summary},
+                "locations": [
+                    {"physicalLocation": {"artifactLocation": {"uri": item.source, "uriBaseId": "%SRCROOT%"}}}
+                    for item in check.evidence
+                ],
+            }
+        )
     payload = {
         "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
         "version": "2.1.0",
-        "runs": [{"tool": {"driver": {"name": "Shipwright", "version": report.tool_version, "rules": rules}}, "results": results}],
+        "runs": [
+            {
+                "tool": {"driver": {"name": "Shipwright", "version": report.tool_version, "rules": rules}},
+                "results": results,
+            }
+        ],
     }
     return json.dumps(payload, indent=2) + "\n"

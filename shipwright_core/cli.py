@@ -17,11 +17,18 @@ from .renderers import to_json, to_markdown, to_sarif
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="shipwright", description="Evidence-backed release readiness for repositories.")
+    parser = argparse.ArgumentParser(
+        prog="shipwright", description="Evidence-backed release readiness for repositories."
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
-    for name, help_text in (("inspect", "Inspect a repository and emit its evidence ledger."), ("gate", "Fail when the repository is not release-ready.")):
+    for name, help_text in (
+        ("inspect", "Inspect a repository and emit its evidence ledger."),
+        ("gate", "Fail when the repository is not release-ready."),
+    ):
         command = subparsers.add_parser(name, help=help_text)
-        command.add_argument("path", nargs="?", default=".", help="Repository path (default: current directory).")
+        command.add_argument(
+            "path", nargs="?", default=".", help="Repository path (default: current directory)."
+        )
         command.add_argument("--format", choices=("markdown", "json", "sarif"), default="markdown")
         command.add_argument("--policy", help="Path to a shipwright.toml policy file.")
         command.add_argument("--output", help="Write the report to a file instead of stdout.")
