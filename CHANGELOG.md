@@ -2,6 +2,13 @@
 
 All notable changes to Shipwright are documented here.
 
+## [0.3.4] - 2026-08-20
+
+### Fixed
+
+- Align package metadata and built artifact filenames with the semantic Git tag.
+- Fail the release workflow before attestation or upload when the tag and artifact versions diverge.
+
 ## [0.3.3] - 2026-08-20
 
 ### Added

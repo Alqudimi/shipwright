@@ -28,3 +28,8 @@ The workflow intentionally attests release artifacts, not every test build or so
 The release workflow uses `actions/attest-build-provenance` rather than calling the lower-level `actions/attest` action directly. The wrapper supplies the default SLSA build provenance predicate for release artifacts; direct `actions/attest` use requires an explicit custom predicate or predicate file.
 
 Reference: [actions/attest-build-provenance action.yml](https://github.com/actions/attest-build-provenance/blob/main/action.yml).
+
+
+## Version integrity
+
+The tag-triggered workflow derives the expected package version from `github.ref_name` and checks the built wheel and source distribution names before attestation or GitHub Release upload. This prevents a release tag from advertising one version while distributing metadata for another version.

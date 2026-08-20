@@ -31,6 +31,15 @@ jobs:
           name: shipwright-${{ github.ref_name }}
           path: dist/
           if-no-files-found: error
+      - name: Validate artifact version matches tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          expected_version="${RELEASE_TAG#v}"
+          wheel_pattern="dist/shipwright_readiness-${expected_version}-*.whl"
+          source="dist/shipwright_readiness-${expected_version}.tar.gz"
+          compgen -G "$wheel_pattern" >/dev/null || { echo "wheel version does not match ${expected_version}" >&2; exit 1; }
+          test -f "$source" || { echo "sdist version does not match ${expected_version}" >&2; exit 1; }
       - name: Attest release artifacts
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4
         with:
