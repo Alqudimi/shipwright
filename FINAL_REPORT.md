@@ -125,3 +125,21 @@ The repository includes README, architecture documentation, policy example, CONT
 | `shipwright_readiness-0.3.4.tar.gz` | 159,018 bytes | `02612d84f37b4fa5a4e9af7134279f5ebedb846c53033523225d1cfd6c15f314` |
 
 تم استخراج metadata من wheel نفسه وتأكدت القيم `Name: shipwright-readiness` و`Version: 0.3.4`. بذلك أصبح tag، package metadata، filenames، release assets، وprovenance متسقة في الإصدار الأخير.
+
+
+## v0.3.5–v0.3.6 consumer-verification addendum
+
+أضيفت بوابة تحقق مستقلة إلى release workflow باستخدام `gh attestation verify`. لا تكتفي البوابة بوجود provenance؛ بل تفرض المستودع وملف `.github/workflows/release.yml` بوصفه signer workflow، مع SLSA provenance predicate الافتراضي.
+
+عند إصدار v0.3.5 كشف version guard أن `pyproject.toml` ما زال يحمل `0.3.4`، فأوقف workflow قبل attestation أو upload. هذه نتيجة فشل صحيحة ومقصودة تثبت أن الحارس يمنع artifact غير متسق؛ لم يتم تجاوزها أو إخفاؤها. عولج السبب برفع metadata إلى `0.3.6` وإصدار v0.3.6.
+
+تم تشغيل Release رقم `32491153804` على commit `bc29f12` بنجاح كامل: build، upload artifact، version guard، attestation، attach assets، ثم `Verify artifact attestations as consumer` لكل من wheel وsdist. كما نجحت CI وSecurity على نفس commit.
+
+تم تنزيل artifacts من GitHub والتحقق منها مستقلًا:
+
+| Artifact | Size | SHA-256 |
+| --- | ---: | --- |
+| `shipwright_readiness-0.3.6-py3-none-any.whl` | 14,385 bytes | `16b2327d7acd22c3e36b3cef97e3beb289cd2cd7d0cc4e8be8665e1beef022c5` |
+| `shipwright_readiness-0.3.6.tar.gz` | 159,779 bytes | `31a0088abc63b5b58f23298059df8ed656e38424be627100acb0ad816b3810a9` |
+
+وقُرئت metadata من wheel نفسه: `Name: shipwright-readiness` و`Version: 0.3.6`. القيود المتبقية هي عدم نشر الحزمة إلى PyPI وعدم توفر Docker runtime في sandbox؛ لذلك لم أدّع تنفيذ هذين المسارين.
