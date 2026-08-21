@@ -33,3 +33,8 @@ Reference: [actions/attest-build-provenance action.yml](https://github.com/actio
 ## Version integrity
 
 The tag-triggered workflow derives the expected package version from `github.ref_name` and checks the built wheel and source distribution names before attestation or GitHub Release upload. This prevents a release tag from advertising one version while distributing metadata for another version.
+
+
+## Consumer verification gate
+
+After attestation and release upload, the workflow runs `gh attestation verify` for every artifact. Verification enforces the repository and the exact `.github/workflows/release.yml` signer, in addition to the default SLSA provenance predicate. This makes the release pipeline test the consumer verification path rather than only checking that an attestation was created.

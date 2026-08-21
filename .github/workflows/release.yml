@@ -50,3 +50,11 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
           REPOSITORY: ${{ github.repository }}
         run: gh release upload "$RELEASE_TAG" dist/* --repo "$REPOSITORY" --clobber
+      - name: Verify artifact attestations as consumer
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          for artifact in dist/*; do
+            gh attestation verify "$artifact" --repo "$REPOSITORY" --signer-workflow "${REPOSITORY}/.github/workflows/release.yml"
+          done

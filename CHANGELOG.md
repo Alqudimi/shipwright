@@ -2,6 +2,13 @@
 
 All notable changes to Shipwright are documented here.
 
+## [0.3.5] - 2026-08-21
+
+### Added
+
+- Verify every release artifact with `gh attestation verify` after upload.
+- Enforce the repository and exact Release workflow as the provenance signer.
+
 ## [0.3.4] - 2026-08-20
 
 ### Fixed
