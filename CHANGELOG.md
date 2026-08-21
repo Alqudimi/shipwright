@@ -2,6 +2,13 @@
 
 All notable changes to Shipwright are documented here.
 
+## [0.3.6] - 2026-08-21
+
+### Fixed
+
+- Align package metadata with the release version after the v0.3.5 guard correctly rejected a stale `0.3.4` metadata value.
+- Preserve the failing v0.3.5 release attempt as evidence that the version-integrity gate blocks inconsistent artifacts.
+
 ## [0.3.5] - 2026-08-21
 
 ### Added
