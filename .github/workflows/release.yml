@@ -21,9 +21,20 @@ jobs:
         with:
           python-version: "3.12"
       - name: Build package
+        env:
+          SOURCE_DATE_EPOCH: "0"
         run: |
           python -m pip install --upgrade pip build
           python -m build
+      - name: Rebuild and compare artifacts
+        env:
+          SOURCE_DATE_EPOCH: "0"
+        run: |
+          rm -rf /tmp/shipwright-rebuild
+          python -m build --outdir /tmp/shipwright-rebuild
+          (cd dist && sha256sum * | sort) >/tmp/shipwright-build-a.sha256
+          (cd /tmp/shipwright-rebuild && sha256sum * | sort) >/tmp/shipwright-build-b.sha256
+          cmp /tmp/shipwright-build-a.sha256 /tmp/shipwright-build-b.sha256
       - name: Upload release artifacts
         id: upload
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

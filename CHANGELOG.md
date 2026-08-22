@@ -2,6 +2,13 @@
 
 All notable changes to Shipwright are documented here.
 
+## [0.3.7] - 2026-08-22
+
+### Added
+
+- Build the wheel and sdist twice with `SOURCE_DATE_EPOCH=0` and compare SHA-256 manifests before release attestation.
+- Document the deterministic-build boundary and its limitations.
+
 ## [0.3.6] - 2026-08-21
 
 ### Fixed
